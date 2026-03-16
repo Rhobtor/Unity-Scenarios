@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="dji_model">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0366546574565618 -0.0366036625069469 0.0790145657965298"
+        rpy="0 0 0" />
+      <mass
+        value="5.73386727346732" />
+      <inertia
+        ixx="0.227415676209938"
+        ixy="-0.000662364261628311"
+        ixz="0.000157366577009368"
+        iyy="0.24826305034679"
+        iyz="3.51675834404936E-05"
+        izz="0.232217102011382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="prop1">
+    <inertial>
+      <origin
+        xyz="-3.04734570910625E-11 0.0066212036951226 2.72639577580946E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615760432500399" />
+      <inertia
+        ixx="7.20200902278492E-06"
+        ixy="1.05429060465242E-16"
+        ixz="8.36128617871377E-08"
+        iyy="7.2908363787462E-06"
+        iyz="1.51295953651923E-15"
+        izz="1.54590227370188E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop1_joint"
+    type="continuous">
+    <origin
+      xyz="0.21675 0.35938 0.029119"
+      rpy="1.5708 0 -0.90149" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="prop2">
+    <inertial>
+      <origin
+        xyz="-3.04820613195034E-11 0.00662121093234629 2.7253516110548E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615762024425589" />
+      <inertia
+        ixx="7.20201139143544E-06"
+        ixy="1.0527994465254E-16"
+        ixz="8.36142849766262E-08"
+        iyy="7.29083908409867E-06"
+        iyz="1.51145765465141E-15"
+        izz="1.54590514120735E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop2_joint"
+    type="continuous">
+    <origin
+      xyz="-0.28959 0.35938 0.029119"
+      rpy="1.5708 0 -0.13367" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop2" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="prop3">
+    <inertial>
+      <origin
+        xyz="-3.04324343503026E-11 0.00662120369516802 2.72482425511811E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615760432496466" />
+      <inertia
+        ixx="7.20200902295538E-06"
+        ixy="1.06783017549946E-16"
+        ixz="8.36128617778664E-08"
+        iyy="7.29083637891754E-06"
+        iyz="1.51271427155882E-15"
+        izz="1.54590227368092E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop3_joint"
+    type="continuous">
+    <origin
+      xyz="-0.54276 -0.079123 0.029119"
+      rpy="1.5708 0 0.6776" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop3" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="prop4">
+    <inertial>
+      <origin
+        xyz="-3.05253600174638E-11 0.00662120310130632 2.71811628760332E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615760194078875" />
+      <inertia
+        ixx="7.20200806560242E-06"
+        ixy="1.04743813115206E-16"
+        ixz="8.36126707807466E-08"
+        iyy="7.29083537603809E-06"
+        iyz="1.50226581030572E-15"
+        izz="1.54590153314487E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop4_joint"
+    type="continuous">
+    <origin
+      xyz="-0.28959 -0.51763 0.029119"
+      rpy="1.5708 0 -2.3617" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop4" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="prop5">
+    <inertial>
+      <origin
+        xyz="-3.04970493303358E-11 0.00662121125951859 2.72262878908691E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615763008295521" />
+      <inertia
+        ixx="7.20201284534689E-06"
+        ixy="1.0509825824897E-16"
+        ixz="8.36142374512711E-08"
+        iyy="7.29084055657243E-06"
+        iyz="1.50799923421817E-15"
+        izz="1.54590723174322E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop5_joint"
+    type="continuous">
+    <origin
+      xyz="0.21675 -0.51763 0.029119"
+      rpy="1.5708 0 -2.0258" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop5" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+  <link
+    name="prop6">
+    <inertial>
+      <origin
+        xyz="-3.04426206465536E-11 0.00662121093241127 2.72400102474535E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.00615762024416031" />
+      <inertia
+        ixx="7.2020113914285E-06"
+        ixy="1.06570012980948E-16"
+        ixz="8.36142849793802E-08"
+        iyy="7.29083908409208E-06"
+        iyz="1.51127818093813E-15"
+        izz="1.54590514117569E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.666666666666667 0.698039215686274 0.768627450980392 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="meshes/prop6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="prop6_joint"
+    type="continuous">
+    <origin
+      xyz="0.46992 -0.079123 0.029119"
+      rpy="1.5708 0 1.3853" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop6" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="100"
+      velocity="100" />
+  </joint>
+</robot>
