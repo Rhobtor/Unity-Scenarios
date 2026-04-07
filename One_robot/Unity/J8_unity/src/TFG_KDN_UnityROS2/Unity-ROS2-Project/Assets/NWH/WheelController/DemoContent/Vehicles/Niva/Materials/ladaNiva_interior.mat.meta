@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 799eb735014baa54e95327d027d7a11d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/DemoContent/Vehicles/Niva/Materials/ladaNiva_interior.mat
+  uploadId: 762325

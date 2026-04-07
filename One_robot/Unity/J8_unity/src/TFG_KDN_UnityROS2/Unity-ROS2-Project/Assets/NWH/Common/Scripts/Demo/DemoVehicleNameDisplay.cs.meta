@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a83e7189e2b8857438a1ff1c25aeec05
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Demo/DemoVehicleNameDisplay.cs
+  uploadId: 762325

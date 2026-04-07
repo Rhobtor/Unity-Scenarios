@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d9f7b6a42073bb2468b35c53ef28f460
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Vehicle/TireFrictionPresets/AsphaltWetTireFrictionPreset.asset
+  uploadId: 762325

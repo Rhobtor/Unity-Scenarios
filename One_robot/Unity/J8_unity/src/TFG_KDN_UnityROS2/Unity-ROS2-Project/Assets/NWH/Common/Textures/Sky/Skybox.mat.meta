@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 190c47f74e882c54abe4c0a365067d84
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Textures/Sky/Skybox.mat
+  uploadId: 762325

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0ba82d944eef0224b9a683e917e1976c
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/Documentation/__DOCUMENTATION_README__.txt
+  uploadId: 762325

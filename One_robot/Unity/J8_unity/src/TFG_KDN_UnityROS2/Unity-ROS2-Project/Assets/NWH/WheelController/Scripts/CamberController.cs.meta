@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 045087cf10bcdbb4585a47fa1a265144
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/Scripts/CamberController.cs
+  uploadId: 762325

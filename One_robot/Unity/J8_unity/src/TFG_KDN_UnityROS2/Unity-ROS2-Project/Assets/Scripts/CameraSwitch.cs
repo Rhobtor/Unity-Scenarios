@@ -24,6 +24,21 @@ public class CameraSwitch : MonoBehaviour
 
     private int count = 0;
 
+    private List<GameObject> GetAssignedCameras()
+    {
+        List<GameObject> cameras = new List<GameObject>(7);
+
+        if (Camera1 != null) cameras.Add(Camera1);
+        if (Camera2 != null) cameras.Add(Camera2);
+        if (Camera3 != null) cameras.Add(Camera3);
+        if (Camera4 != null) cameras.Add(Camera4);
+        if (Camera5 != null) cameras.Add(Camera5);
+        if (Camera6 != null) cameras.Add(Camera6);
+        if (Camera7 != null) cameras.Add(Camera7);
+
+        return cameras;
+    }
+
     void Start()
     {
         SetActiveCamera(0);
@@ -31,9 +46,15 @@ public class CameraSwitch : MonoBehaviour
 
     void Update()
     {
+        List<GameObject> cameras = GetAssignedCameras();
+        if (cameras.Count == 0)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.C))
         {
-            count = (count + 1) % 7; // 0 a 6
+            count = (count + 1) % cameras.Count;
             SetActiveCamera(count);
             Debug.Log("C�mara activa: " + (count + 1));
         }
@@ -41,12 +62,17 @@ public class CameraSwitch : MonoBehaviour
 
     void SetActiveCamera(int index)
     {
-        Camera1.SetActive(index == 0);
-        Camera2.SetActive(index == 1);
-        Camera3.SetActive(index == 2);
-        Camera4.SetActive(index == 3);
-        Camera5.SetActive(index == 4);
-        Camera6.SetActive(index == 5);
-        Camera7.SetActive(index == 6);
+        List<GameObject> cameras = GetAssignedCameras();
+        if (cameras.Count == 0)
+        {
+            return;
+        }
+
+        count = Mathf.Clamp(index, 0, cameras.Count - 1);
+
+        for (int i = 0; i < cameras.Count; i++)
+        {
+            cameras[i].SetActive(i == count);
+        }
     }
 }

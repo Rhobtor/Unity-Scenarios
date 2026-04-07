@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 21211030b85d8a44190f2a36324ef00e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Vehicle/TireFrictionPresets/GenericTireFrictionPreset.asset
+  uploadId: 762325

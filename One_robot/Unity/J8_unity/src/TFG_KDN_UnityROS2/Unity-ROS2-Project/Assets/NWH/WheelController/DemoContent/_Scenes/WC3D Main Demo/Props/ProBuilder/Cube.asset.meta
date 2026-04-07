@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 56775419468b3a543b1410912188767c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4300000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/DemoContent/_Scenes/WC3D Main Demo/Props/ProBuilder/Cube.asset
+  uploadId: 762325

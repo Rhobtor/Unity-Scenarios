@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2dd2af3b8ee824749bd488d6f8f4aafb
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Materials/CheckerMaterial.mat
+  uploadId: 762325

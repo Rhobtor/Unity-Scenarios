@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2d1b96218c636dd4e8d99847c9d2e632
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4300000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/DemoContent/_Scenes/WC3D Main Demo/Props/ProBuilder/PolyShape.asset
+  uploadId: 762325

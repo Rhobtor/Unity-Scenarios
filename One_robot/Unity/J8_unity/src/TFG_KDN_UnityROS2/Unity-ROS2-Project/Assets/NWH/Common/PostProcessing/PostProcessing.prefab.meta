@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4081359a1d200a343a828de20bced24c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/PostProcessing/PostProcessing.prefab
+  uploadId: 762325
