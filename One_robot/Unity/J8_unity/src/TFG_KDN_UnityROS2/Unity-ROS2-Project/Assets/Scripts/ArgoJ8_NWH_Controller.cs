@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
 using NWH.WheelController3D;
+using System.Text;
 
 namespace RosSharp.Control
 {
@@ -36,6 +37,9 @@ namespace RosSharp.Control
         [Tooltip("Torque applied when braking to stop")]
         public float brakeTorque = 1000f;
 
+        [Tooltip("Brake torque applied while coasting to reduce sliding.")]
+        public float coastBrakeTorque = 120f;
+
         [Tooltip("Distance between left and right wheel tracks (meters)")]
         public float trackWidth = 1.40f;
 
@@ -48,11 +52,21 @@ namespace RosSharp.Control
         [Tooltip("How quickly wheel torque can change. Lower values feel smoother.")]
         public float torqueChangeRate = 1200f;
 
+        [Tooltip("Converts side speed error in m/s to wheel torque in N·m.")]
+        public float speedErrorToTorque = 450f;
+
+        [Tooltip("Extra brake when vehicle side speed is above target speed.")]
+        public float overspeedBrakeTorque = 220f;
+
         [Tooltip("Invert torque direction for left-side wheels if they are mirrored.")]
         public bool invertLeftSide = false;
 
         [Tooltip("Invert torque direction for right-side wheels if they are mirrored.")]
         public bool invertRightSide = true;
+
+        [Header("Diagnostics")]
+        public bool logWheelDiagnostics = false;
+        public float diagnosticsInterval = 1.0f;
 
         private ROSConnection ros;
         private float rosLinear = 0f;
@@ -60,9 +74,12 @@ namespace RosSharp.Control
         private float lastCmdReceived = 0f;
         private float currentLeftTorque = 0f;
         private float currentRightTorque = 0f;
+        private float lastDiagnosticsTime = 0f;
+        private Rigidbody targetRigidbody;
 
         void Start()
         {
+            targetRigidbody = GetComponent<Rigidbody>();
             ros = ROSConnection.GetOrCreateInstance();
             ros.Subscribe<TwistMsg>(topicName, ReceiveROSCmd);
         }
@@ -86,19 +103,33 @@ namespace RosSharp.Control
             float normalizedLinear = Mathf.Clamp(rosLinear / Mathf.Max(0.01f, maxLinearCommand), -1f, 1f);
             float normalizedAngular = Mathf.Clamp(rosAngular / Mathf.Max(0.01f, maxAngularCommand), -1f, 1f);
 
-            // Skid-steer differential: angular.z > 0 = turn left in ROS convention.
-            float leftInput = Mathf.Clamp(normalizedLinear + normalizedAngular, -1f, 1f);
-            float rightInput = Mathf.Clamp(normalizedLinear - normalizedAngular, -1f, 1f);
+            // Differential side-speed targets in m/s. Positive angular.z is left turn in ROS.
+            float targetLeftSpeed = rosLinear - rosAngular * trackWidth * 0.5f;
+            float targetRightSpeed = rosLinear + rosAngular * trackWidth * 0.5f;
 
-            float targetLeftTorque = leftInput * maxMotorTorque * (invertLeftSide ? -1f : 1f);
-            float targetRightTorque = rightInput * maxMotorTorque * (invertRightSide ? -1f : 1f);
+            Vector3 localVelocity = transform.InverseTransformDirection(targetRigidbody.velocity);
+            Vector3 localAngularVelocity = transform.InverseTransformDirection(targetRigidbody.angularVelocity);
+            float currentForwardSpeed = localVelocity.z;
+            float currentYawRate = localAngularVelocity.y;
+            float currentLeftSpeed = currentForwardSpeed - currentYawRate * trackWidth * 0.5f;
+            float currentRightSpeed = currentForwardSpeed + currentYawRate * trackWidth * 0.5f;
+
+            float leftSpeedError = targetLeftSpeed - currentLeftSpeed;
+            float rightSpeedError = targetRightSpeed - currentRightSpeed;
+
+            float leftInput = Mathf.Clamp(targetLeftSpeed / Mathf.Max(0.01f, maxLinearCommand), -1f, 1f);
+            float rightInput = Mathf.Clamp(targetRightSpeed / Mathf.Max(0.01f, maxLinearCommand), -1f, 1f);
+
+            float targetLeftTorque = Mathf.Clamp(leftSpeedError * speedErrorToTorque, -maxMotorTorque, maxMotorTorque);
+            float targetRightTorque = Mathf.Clamp(rightSpeedError * speedErrorToTorque, -maxMotorTorque, maxMotorTorque);
+            targetLeftTorque *= invertLeftSide ? -1f : 1f;
+            targetRightTorque *= invertRightSide ? -1f : 1f;
 
             currentLeftTorque = Mathf.MoveTowards(currentLeftTorque, targetLeftTorque, torqueChangeRate * Time.fixedDeltaTime);
             currentRightTorque = Mathf.MoveTowards(currentRightTorque, targetRightTorque, torqueChangeRate * Time.fixedDeltaTime);
 
-            // Apply brake when input is zero to prevent rolling
-            float leftBrake  = (Mathf.Abs(leftInput)  < 0.01f) ? brakeTorque : 0f;
-            float rightBrake = (Mathf.Abs(rightInput) < 0.01f) ? brakeTorque : 0f;
+            float leftBrake = CalculateBrakeTorque(targetLeftSpeed, currentLeftSpeed, leftInput);
+            float rightBrake = CalculateBrakeTorque(targetRightSpeed, currentRightSpeed, rightInput);
 
             SetWheelTorque(wheelA1, currentLeftTorque,  leftBrake);
             SetWheelTorque(wheelA2, currentLeftTorque,  leftBrake);
@@ -109,6 +140,12 @@ namespace RosSharp.Control
             SetWheelTorque(wheelB2, currentRightTorque, rightBrake);
             SetWheelTorque(wheelB3, currentRightTorque, rightBrake);
             SetWheelTorque(wheelB4, currentRightTorque, rightBrake);
+
+            if (logWheelDiagnostics && Time.time - lastDiagnosticsTime >= diagnosticsInterval)
+            {
+                lastDiagnosticsTime = Time.time;
+                Debug.Log(BuildDiagnosticsReport());
+            }
         }
 
         private void SetWheelTorque(WheelController wc, float motorTorque, float brake)
@@ -116,6 +153,66 @@ namespace RosSharp.Control
             if (wc == null) return;
             wc.MotorTorque = motorTorque;
             wc.BrakeTorque = brake;
+        }
+
+        private float CalculateBrakeTorque(float targetSideSpeed, float currentSideSpeed, float normalizedInput)
+        {
+            if (Mathf.Abs(normalizedInput) < 0.01f)
+            {
+                return brakeTorque;
+            }
+
+            if (Mathf.Abs(targetSideSpeed) < 0.05f)
+            {
+                return coastBrakeTorque;
+            }
+
+            if (Mathf.Abs(currentSideSpeed) > Mathf.Abs(targetSideSpeed) + 0.1f)
+            {
+                return overspeedBrakeTorque;
+            }
+
+            return 0f;
+        }
+
+        private string BuildDiagnosticsReport()
+        {
+            StringBuilder builder = new StringBuilder(512);
+            builder.AppendLine("ArgoJ8 wheel diagnostics:");
+            builder.Append("cmd linear=").Append(rosLinear.ToString("F3"))
+                .Append(" angular=").Append(rosAngular.ToString("F3"))
+                .Append(" leftTorque=").Append(currentLeftTorque.ToString("F1"))
+                .Append(" rightTorque=").Append(currentRightTorque.ToString("F1"))
+                .Append(" secondsSinceCmd=").Append((Time.time - lastCmdReceived).ToString("F2"))
+                .AppendLine();
+            AppendWheelDiagnostics(builder, "A1", wheelA1);
+            AppendWheelDiagnostics(builder, "A2", wheelA2);
+            AppendWheelDiagnostics(builder, "A3", wheelA3);
+            AppendWheelDiagnostics(builder, "A4", wheelA4);
+            AppendWheelDiagnostics(builder, "B1", wheelB1);
+            AppendWheelDiagnostics(builder, "B2", wheelB2);
+            AppendWheelDiagnostics(builder, "B3", wheelB3);
+            AppendWheelDiagnostics(builder, "B4", wheelB4);
+            return builder.ToString();
+        }
+
+        private void AppendWheelDiagnostics(StringBuilder builder, string label, WheelController wheel)
+        {
+            if (wheel == null)
+            {
+                builder.AppendLine(label + ": null");
+                return;
+            }
+
+            builder.Append(label)
+                .Append(" grounded=").Append(wheel.IsGrounded)
+                .Append(" load=").Append(wheel.Load.ToString("F1"))
+                .Append(" rpm=").Append(wheel.RPM.ToString("F1"))
+                .Append(" torque=").Append(wheel.MotorTorque.ToString("F1"))
+                .Append(" counter=").Append(wheel.CounterTorque.ToString("F1"))
+                .Append(" longSlip=").Append(wheel.LongitudinalSlip.ToString("F2"))
+                .Append(" latSlip=").Append(wheel.LateralSlip.ToString("F2"))
+                .AppendLine();
         }
     }
 }
