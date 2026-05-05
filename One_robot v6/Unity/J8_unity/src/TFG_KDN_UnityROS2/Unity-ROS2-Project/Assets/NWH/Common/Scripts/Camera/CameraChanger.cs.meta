@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: ebbf52df36e2d984489f1a6c789c9e95
+timeCreated: 1510062979
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Camera/CameraChanger.cs
+  uploadId: 762325

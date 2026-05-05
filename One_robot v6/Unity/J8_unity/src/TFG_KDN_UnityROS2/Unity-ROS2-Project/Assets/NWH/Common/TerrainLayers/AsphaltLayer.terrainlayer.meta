@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5511c8d9ccbbd7f4eaacd932388e4017
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/TerrainLayers/AsphaltLayer.terrainlayer
+  uploadId: 762325

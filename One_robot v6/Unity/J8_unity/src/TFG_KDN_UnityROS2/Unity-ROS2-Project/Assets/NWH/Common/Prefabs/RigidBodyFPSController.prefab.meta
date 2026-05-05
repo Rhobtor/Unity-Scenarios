@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e6a6c76446ee35448a8ca9db50412d21
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Prefabs/RigidBodyFPSController.prefab
+  uploadId: 762325

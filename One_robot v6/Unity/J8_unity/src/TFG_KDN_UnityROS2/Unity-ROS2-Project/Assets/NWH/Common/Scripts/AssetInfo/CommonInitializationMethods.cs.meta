@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5d00f825a64982c45854e762515cc7b7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/AssetInfo/CommonInitializationMethods.cs
+  uploadId: 762325

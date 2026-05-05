@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4701ecfae761d464fa3c48783371094c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Prefabs/Vehicle Camera Cinemachine.prefab
+  uploadId: 762325

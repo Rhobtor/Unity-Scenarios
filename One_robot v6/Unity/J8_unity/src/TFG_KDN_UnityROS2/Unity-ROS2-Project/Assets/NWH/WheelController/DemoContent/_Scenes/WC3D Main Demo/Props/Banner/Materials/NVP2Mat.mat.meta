@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f036245e52ed7b240ac224000f06508e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/DemoContent/_Scenes/WC3D Main Demo/Props/Banner/Materials/NVP2Mat.mat
+  uploadId: 762325

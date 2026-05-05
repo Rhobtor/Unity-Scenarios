@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="NWH.WheelController.csproj" />
+  <Project Path="NWH.Common.csproj" />
+  <Project Path="UnitySensorsRuntime.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>

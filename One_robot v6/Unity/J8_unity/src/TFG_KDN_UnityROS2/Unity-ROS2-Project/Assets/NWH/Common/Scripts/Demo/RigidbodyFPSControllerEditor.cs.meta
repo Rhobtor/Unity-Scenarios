@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: b2fefeb2837a4d9b8a048fd5e3ef15ec
+timeCreated: 1593353781
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Demo/RigidbodyFPSControllerEditor.cs
+  uploadId: 762325

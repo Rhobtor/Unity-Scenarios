@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 190faeea00394204fa533b39a4e35ef9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/Scripts/WheelHit.cs
+  uploadId: 762325

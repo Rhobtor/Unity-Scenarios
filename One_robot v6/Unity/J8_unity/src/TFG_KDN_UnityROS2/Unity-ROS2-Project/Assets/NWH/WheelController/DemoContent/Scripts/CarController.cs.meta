@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 62554c6b97c73984f987d478c0efacd7
+timeCreated: 1434628183
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/DemoContent/Scripts/CarController.cs
+  uploadId: 762325

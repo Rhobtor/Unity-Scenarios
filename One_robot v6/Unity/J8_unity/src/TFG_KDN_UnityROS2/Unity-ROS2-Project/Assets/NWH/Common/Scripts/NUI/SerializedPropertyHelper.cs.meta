@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 76156108e69e9ba4897a469d702f4d40
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/NUI/SerializedPropertyHelper.cs
+  uploadId: 762325

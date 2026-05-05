@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6192ed0dc72e14940b68626a9543724b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/ShiftingOrigin/ShiftingOrigin.cs
+  uploadId: 762325

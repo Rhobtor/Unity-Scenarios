@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8fbd1e55d09bbf4489f42741d50ea951
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Utility/UnitConverter.cs
+  uploadId: 762325

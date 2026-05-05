@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1e7fd05a4f92bf7458e985197cac2b97
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Materials/TerrainMaterial.mat
+  uploadId: 762325

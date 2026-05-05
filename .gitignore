@@ -2,6 +2,7 @@
 /*
 !/.gitignore
 !/One_robot/
+!/One_robot v6/
 !/many_robots/
 
 /One_robot/*
@@ -17,6 +18,20 @@
 !/One_robot/Unity/J8_unity/src/TFG_KDN_UnityROS2/Unity-ROS2-Project/
 !/One_robot/Unity/J8_unity/src/TFG_KDN_UnityROS2/ros2_ws/**
 !/One_robot/Unity/J8_unity/src/TFG_KDN_UnityROS2/Unity-ROS2-Project/**
+
+/One_robot v6/*
+!/One_robot v6/Unity/
+/One_robot v6/Unity/*
+!/One_robot v6/Unity/J8_unity/
+/One_robot v6/Unity/J8_unity/*
+!/One_robot v6/Unity/J8_unity/src/
+/One_robot v6/Unity/J8_unity/src/*
+!/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/
+/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/*
+!/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/ros2_ws/
+!/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/Unity-ROS2-Project/
+!/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/ros2_ws/**
+!/One_robot v6/Unity/J8_unity/src/TFG_KDN_UnityROS2/Unity-ROS2-Project/**
 
 /many_robots/*
 !/many_robots/Unity/

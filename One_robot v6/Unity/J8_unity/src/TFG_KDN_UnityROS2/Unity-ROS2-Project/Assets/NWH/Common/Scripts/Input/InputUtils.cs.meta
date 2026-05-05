@@ -1,0 +1,10 @@
+﻿fileFormatVersion: 2
+guid: e808b630f95a45838f09520152a38a93
+timeCreated: 1593368933
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/Common/Scripts/Input/InputUtils.cs
+  uploadId: 762325

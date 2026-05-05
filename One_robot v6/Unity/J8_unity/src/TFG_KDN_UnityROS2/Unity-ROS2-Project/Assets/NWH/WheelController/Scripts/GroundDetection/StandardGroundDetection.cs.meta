@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: db0605d6c21bbdb479e4f86448400e81
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74512
+  packageName: Wheel Controller 3D
+  packageVersion: 13.6
+  assetPath: Assets/NWH/WheelController/Scripts/GroundDetection/StandardGroundDetection.cs
+  uploadId: 762325
