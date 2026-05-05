@@ -500,7 +500,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
 
         if (enableMotionDistortion && motionSource != null)
         {
-            linearVel = motionSource.velocity;
+            linearVel = motionSource.linearVelocity;
             angularVel = motionSource.angularVelocity;
         }
 
@@ -597,7 +597,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
 
         if (enableMotionDistortion && motionSource != null)
         {
-            linearVel = motionSource.velocity;
+            linearVel = motionSource.linearVelocity;
             angularVel = motionSource.angularVelocity;
         }
 

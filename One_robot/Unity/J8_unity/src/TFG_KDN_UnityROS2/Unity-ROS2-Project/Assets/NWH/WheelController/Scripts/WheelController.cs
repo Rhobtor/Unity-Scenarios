@@ -723,8 +723,8 @@ namespace NWH.WheelController3D
             }
             wheel.meshCollider.convex = true;
             wheel.meshCollider.gameObject.layer = meshColliderLayer; // Ignore self raycast hit.
-            wheel.meshCollider.material.bounceCombine = PhysicMaterialCombine.Minimum;
-            wheel.meshCollider.material.frictionCombine = PhysicMaterialCombine.Minimum;
+            wheel.meshCollider.material.bounceCombine = PhysicsMaterialCombine.Minimum;
+            wheel.meshCollider.material.frictionCombine = PhysicsMaterialCombine.Minimum;
             wheel.meshCollider.material.bounciness = 0;
             wheel.meshCollider.material.staticFriction = 0;
             wheel.meshCollider.material.dynamicFriction = 0;

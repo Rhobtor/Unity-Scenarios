@@ -55,7 +55,7 @@ namespace NWH.Common.Demo
                 targetVelocity *= speed;
 
                 // Apply a force that attempts to reach our target velocity
-                Vector3 velocity = _rb.velocity;
+                Vector3 velocity = _rb.linearVelocity;
                 Vector3 velocityChange = targetVelocity - velocity;
                 velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
                 velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);

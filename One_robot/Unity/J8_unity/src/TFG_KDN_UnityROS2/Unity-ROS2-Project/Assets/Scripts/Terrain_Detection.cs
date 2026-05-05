@@ -5,7 +5,7 @@ using UnityEngine;
 public class Terrain_Detection : MonoBehaviour
 {
     //The material I want to modify its characteristics 
-    public PhysicMaterial physicMaterial;
+    public PhysicsMaterial physicMaterial;
     public LayerMask layerToIgnore; //To Assign the layer I want to ignore
     RaycastHit hit;
     

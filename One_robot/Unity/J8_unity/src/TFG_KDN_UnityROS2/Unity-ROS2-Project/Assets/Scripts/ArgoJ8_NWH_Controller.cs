@@ -107,7 +107,7 @@ namespace RosSharp.Control
             float targetLeftSpeed = rosLinear - rosAngular * trackWidth * 0.5f;
             float targetRightSpeed = rosLinear + rosAngular * trackWidth * 0.5f;
 
-            Vector3 localVelocity = transform.InverseTransformDirection(targetRigidbody.velocity);
+            Vector3 localVelocity = transform.InverseTransformDirection(targetRigidbody.linearVelocity);
             Vector3 localAngularVelocity = transform.InverseTransformDirection(targetRigidbody.angularVelocity);
             float currentForwardSpeed = localVelocity.z;
             float currentYawRate = localAngularVelocity.y;

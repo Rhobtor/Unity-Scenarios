@@ -94,7 +94,7 @@ namespace NWH.WheelController3D
         {
             while (true)
             {
-                if (_wc.TargetRigidbody.velocity.sqrMagnitude > 0.5f)
+                if (_wc.TargetRigidbody.linearVelocity.sqrMagnitude > 0.5f)
                 {
                     float loadFactor = Mathf.Clamp01(_wc.Load / _wc.MaxLoad) * loadWearContribution;
                     float lngWear = Mathf.Abs(_wc.LongitudinalSlip) * longitudinalSlipWearContribution;

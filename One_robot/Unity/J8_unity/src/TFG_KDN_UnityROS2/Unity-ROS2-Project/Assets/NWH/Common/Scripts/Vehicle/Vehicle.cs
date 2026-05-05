@@ -278,7 +278,7 @@ namespace NWH.Common.Vehicles
         {
             // Pre-calculate values
             _prevLocalVelocity = LocalVelocity;
-            Velocity = vehicleRigidbody.velocity;
+            Velocity = vehicleRigidbody.linearVelocity;
             LocalVelocity = transform.InverseTransformDirection(Velocity);
             LocalAcceleration = (LocalVelocity - _prevLocalVelocity) / Time.fixedDeltaTime;
             LocalForwardVelocity = LocalVelocity.z;

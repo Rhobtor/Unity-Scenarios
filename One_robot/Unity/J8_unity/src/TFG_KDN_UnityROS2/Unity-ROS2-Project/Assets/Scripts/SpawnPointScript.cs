@@ -120,7 +120,7 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     bool IsStuck()
     {
-        float speed = rootAb ? rootAb.velocity.magnitude : 0f;
+        float speed = rootAb ? rootAb.linearVelocity.magnitude : 0f;
         if (speed < stuckSpeed)
         {
             _stuckTimer += Time.deltaTime;
@@ -140,7 +140,7 @@ public class AutoRecoveryURDF : MonoBehaviour
         // Congelar y poner a cero velocidades para evitar impulsos raros
         foreach (var ab in _allAbs)
         {
-            ab.velocity = Vector3.zero;
+            ab.linearVelocity = Vector3.zero;
             ab.angularVelocity = Vector3.zero;
             ab.immovable = true;
         }

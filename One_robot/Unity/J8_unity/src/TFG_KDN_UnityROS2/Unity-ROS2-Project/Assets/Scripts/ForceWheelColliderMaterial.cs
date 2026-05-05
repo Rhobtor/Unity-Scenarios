@@ -3,7 +3,7 @@ using UnityEngine;
 public class ForceWheelColliderMaterial : MonoBehaviour
 {
     [Header("Material físico que hace que la rueda agarre")]
-    public PhysicMaterial wheelPhysicMaterial;
+    public PhysicsMaterial wheelPhysicMaterial;
 
     [Header("Buscar también objetos desactivados")]
     public bool includeInactive = true;

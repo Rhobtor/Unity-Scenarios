@@ -220,7 +220,7 @@ namespace NWH.Common.Cameras
             }
 
             _rbPrevLocalVelocity = _rbLocalVelocity;
-            _rbLocalVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+            _rbLocalVelocity = transform.InverseTransformDirection(_rigidbody.linearVelocity);
             _rbLocalAcceleration = (_rbLocalVelocity - _rbPrevLocalVelocity) / Time.fixedDeltaTime;
             _rbSpeed = _rbLocalVelocity.z < 0 ? -_rbLocalVelocity.z : _rbLocalVelocity.z;
         }
