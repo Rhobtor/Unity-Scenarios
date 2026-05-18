@@ -31,6 +31,13 @@ public class AutoRecoveryURDF : MonoBehaviour
     [Tooltip("Si el suelo detectado está más lejos que esto => barranco")]
     public float cliffDropThreshold = 1.0f;
 
+    [Header("Reset por colisión")]
+    public bool resetOnCollision = true;
+    [Tooltip("Si el objeto tocado está en alguna de estas capas, se resetea")]
+    public LayerMask resetCollisionLayers = 0;
+    [Tooltip("Opcional: si el objeto tocado tiene este tag, también se resetea")]
+    public string resetCollisionTag = "ResetObstacle";
+
     [Header("Debug")]
     public bool drawDebug = true;
 
@@ -41,6 +48,10 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     // --- internos ---
     ArticulationBody[] _allAbs;
+    Collider[] _robotColliders;
+    readonly Collider[] _overlapResults = new Collider[64];
+    Transform _poseTransform;
+    Rigidbody _targetRb;
     Vector3 _startPos;
     Quaternion _startRot;
     float _stuckTimer, _cooldownUntil;
@@ -49,9 +60,14 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     void Awake()
     {
-        _startPos = transform.position;
-        _startRot = transform.rotation;
         _allAbs = GetComponentsInChildren<ArticulationBody>(true);
+        _robotColliders = GetComponentsInChildren<Collider>(true);
+        RegisterCollisionRelays();
+        _targetRb = GetComponent<Rigidbody>();
+        if (_targetRb == null)
+        {
+            _targetRb = GetComponentInChildren<Rigidbody>(true);
+        }
 
         // Si no asignaste rootAb, intenta hallar el raíz (isRoot)
         if (rootAb == null)
@@ -60,17 +76,11 @@ public class AutoRecoveryURDF : MonoBehaviour
             if (rootAb == null) rootAb = GetComponent<ArticulationBody>();
         }
 
-        _ros = ROSConnection.instance;
-        if (_ros != null)
-        {
-            _ros.Subscribe<EmptyMsg>(TOPIC_RESET, _ => ResetRobot(true));
-            _ros.Subscribe<EmptyMsg>(TOPIC_SUCC,  _ => { ReportDone("SUCCESS"); ResetRobot(false); });
-            _ros.RegisterPublisher<StringMsg>(TOPIC_DONE);
-        }
-        else
-        {
-            Debug.LogWarning("[AutoRecoveryURDF] No hay ROSConnection.instance en la escena.");
-        }
+        _poseTransform = ResolvePoseTransform();
+        _startPos = _poseTransform.position;
+        _startRot = _poseTransform.rotation;
+
+        EnsureRosConnection();
     }
 
     void Update()
@@ -81,19 +91,112 @@ public class AutoRecoveryURDF : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R)) { ReportDone("MANUAL"); ResetRobot(true); }
 
         // Checks “duros”: resetean y reportan FIN de episodio
+        if (IsTouchingResetObstacle()) { ReportDone("COLLISION");      ResetRobot(true);  return; }
         if (IsFlipped())           { ReportDone("FLIPPED");        ResetRobot(true);  return; }
         if (IsOutOfBounds())       { ReportDone("OUT_OF_BOUNDS");  ResetRobot(true);  return; }
         if (IsVoidOrCliffBelow())  { ReportDone("CLIFF");          ResetRobot(true);  return; }
 
-        // Check “blando”: enderezar/respawn suave si se queda atascado
-        if (IsStuck())             { ReportDone("STUCK");          ResetRobot(false); return; }
+        // Si está empotrado contra un obstáculo, hace respawn real en el punto designado.
+        if (IsStuck())             { ReportDone("STUCK");          ResetRobot(true);  return; }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        HandleCollisionFromChild(collision.collider);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        HandleCollisionFromChild(other);
     }
 
     // --- Detecciones ---------------------------------------------------------
 
+    bool ShouldResetFromCollider(Collider other)
+    {
+        if (!resetOnCollision || Time.time < _cooldownUntil || other == null) return false;
+        if (other.transform == transform || other.transform.IsChildOf(transform)) return false;
+
+        bool matchesLayer = (resetCollisionLayers.value & (1 << other.gameObject.layer)) != 0;
+        bool matchesTag = !string.IsNullOrWhiteSpace(resetCollisionTag) && other.CompareTag(resetCollisionTag);
+        return matchesLayer || matchesTag;
+    }
+
+    void RegisterCollisionRelays()
+    {
+        if (_robotColliders == null) return;
+
+        foreach (var robotCollider in _robotColliders)
+        {
+            if (robotCollider == null) continue;
+
+            var relay = robotCollider.GetComponent<AutoRecoveryCollisionRelay>();
+            if (relay == null)
+            {
+                relay = robotCollider.gameObject.AddComponent<AutoRecoveryCollisionRelay>();
+            }
+
+            relay.owner = this;
+        }
+    }
+
+    public void HandleCollisionFromChild(Collider other)
+    {
+        if (!ShouldResetFromCollider(other)) return;
+
+        ReportDone("COLLISION");
+        ResetRobot(true);
+    }
+
+    bool IsTouchingResetObstacle()
+    {
+        if (!resetOnCollision || _robotColliders == null) return false;
+
+        int layerMask = resetCollisionLayers.value != 0 ? resetCollisionLayers.value : ~0;
+
+        foreach (var robotCollider in _robotColliders)
+        {
+            if (robotCollider == null || !robotCollider.enabled || !robotCollider.gameObject.activeInHierarchy) continue;
+
+            Bounds bounds = robotCollider.bounds;
+            if (bounds.size == Vector3.zero) continue;
+
+            int hitCount = Physics.OverlapBoxNonAlloc(
+                bounds.center,
+                Vector3.Max(bounds.extents, Vector3.one * 0.01f),
+                _overlapResults,
+                robotCollider.transform.rotation,
+                layerMask,
+                QueryTriggerInteraction.Collide);
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                Collider other = _overlapResults[i];
+                if (!ShouldResetFromCollider(other)) continue;
+
+                Vector3 direction;
+                float distance;
+                if (Physics.ComputePenetration(
+                    robotCollider,
+                    robotCollider.transform.position,
+                    robotCollider.transform.rotation,
+                    other,
+                    other.transform.position,
+                    other.transform.rotation,
+                    out direction,
+                    out distance))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     bool IsVoidOrCliffBelow()
     {
-        Vector3 origin = transform.position + Vector3.up * 0.2f; // un pelín arriba
+        Vector3 origin = _poseTransform.position + Vector3.up * 0.2f; // un pelín arriba
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, groundProbeDistance, groundLayers, QueryTriggerInteraction.Ignore))
         {
             if (drawDebug) Debug.DrawLine(origin, hit.point, Color.cyan, 0.1f);
@@ -105,14 +208,14 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     bool IsFlipped()
     {
-        float upDot = Vector3.Dot(transform.up, Vector3.up);
+        float upDot = Vector3.Dot(_poseTransform.up, Vector3.up);
         float tiltDeg = Mathf.Acos(Mathf.Clamp(upDot, -1f, 1f)) * Mathf.Rad2Deg;
-        return tiltDeg > maxTiltDeg || transform.up.y < minUpY;
+        return tiltDeg > maxTiltDeg || _poseTransform.up.y < minUpY;
     }
 
     bool IsOutOfBounds()
     {
-        var p = transform.position;
+        var p = _poseTransform.position;
         if (p.y < minY) return true;
         return p.x < minBounds.x || p.y < minBounds.y || p.z < minBounds.z ||
                p.x > maxBounds.x || p.y > maxBounds.y || p.z > maxBounds.z;
@@ -120,7 +223,17 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     bool IsStuck()
     {
-        float speed = rootAb ? rootAb.linearVelocity.magnitude : 0f;
+        float speed = 0f;
+
+        if (_targetRb != null)
+        {
+            speed = _targetRb.linearVelocity.magnitude;
+        }
+        else if (rootAb != null)
+        {
+            speed = rootAb.linearVelocity.magnitude;
+        }
+
         if (speed < stuckSpeed)
         {
             _stuckTimer += Time.deltaTime;
@@ -134,10 +247,35 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     public void ResetRobot(bool hardReset)
     {
+        _stuckTimer = 0f;
+
+        if (_poseTransform == null)
+        {
+            _poseTransform = ResolvePoseTransform();
+        }
+
         Vector3 pos = spawnPoint ? spawnPoint.position : _startPos;
         Quaternion rot = spawnPoint ? spawnPoint.rotation : _startRot;
 
+        if (_targetRb == null)
+        {
+            _targetRb = GetComponent<Rigidbody>();
+            if (_targetRb == null)
+            {
+                _targetRb = GetComponentInChildren<Rigidbody>(true);
+            }
+        }
+
         // Congelar y poner a cero velocidades para evitar impulsos raros
+        bool restoreKinematic = false;
+        if (_targetRb != null)
+        {
+            _targetRb.linearVelocity = Vector3.zero;
+            _targetRb.angularVelocity = Vector3.zero;
+            restoreKinematic = _targetRb.isKinematic;
+            _targetRb.isKinematic = true;
+        }
+
         foreach (var ab in _allAbs)
         {
             ab.linearVelocity = Vector3.zero;
@@ -145,25 +283,92 @@ public class AutoRecoveryURDF : MonoBehaviour
             ab.immovable = true;
         }
 
-        if (!hardReset && Vector3.Distance(transform.position, pos) < 2f)
+        if (!hardReset && Vector3.Distance(_poseTransform.position, pos) < 2f)
         {
             // Enderezar en sitio (conserva heading actual en Y)
-            pos = transform.position;
-            rot = Quaternion.Euler(0f, transform.rotation.eulerAngles.y, 0f);
+            pos = _poseTransform.position;
+            rot = Quaternion.Euler(0f, _poseTransform.rotation.eulerAngles.y, 0f);
         }
 
-        if (rootAb && rootAb.isRoot) rootAb.TeleportRoot(pos, rot);
-        else { transform.SetPositionAndRotation(pos, rot); Physics.SyncTransforms(); }
+        if (_targetRb != null)
+        {
+            _targetRb.transform.SetPositionAndRotation(pos, rot);
+        }
+        else if (rootAb && rootAb.isRoot)
+        {
+            rootAb.TeleportRoot(pos, rot);
+        }
+        else
+        {
+            _poseTransform.SetPositionAndRotation(pos, rot);
+        }
+
+        Physics.SyncTransforms();
 
         foreach (var ab in _allAbs) ab.immovable = false;
+        if (_targetRb != null)
+        {
+            _targetRb.linearVelocity = Vector3.zero;
+            _targetRb.angularVelocity = Vector3.zero;
+            _targetRb.isKinematic = restoreKinematic;
+            _targetRb.WakeUp();
+        }
 
         _cooldownUntil = Time.time + cooldownAfterReset;
     }
 
+    public Transform GetPoseTransform()
+    {
+        if (_poseTransform == null)
+        {
+            _poseTransform = ResolvePoseTransform();
+        }
+
+        return _poseTransform;
+    }
+
+    Transform ResolvePoseTransform()
+    {
+        if (_targetRb != null)
+        {
+            return _targetRb.transform;
+        }
+
+        if (rootAb != null)
+        {
+            return rootAb.transform;
+        }
+
+        return transform;
+    }
+
     void ReportDone(string reason)
     {
-        if (_ros == null) return;
+        EnsureRosConnection();
+        if (_ros == null)
+        {
+            Debug.LogWarning($"[AutoRecoveryURDF] No se pudo publicar {TOPIC_DONE} ({reason}) porque ROSConnection es null.");
+            return;
+        }
+
+        Debug.Log($"[AutoRecoveryURDF] Publicando {TOPIC_DONE}: {reason}");
         _ros.Publish(TOPIC_DONE, new StringMsg(reason));
+    }
+
+    void EnsureRosConnection()
+    {
+        if (_ros != null) return;
+
+        _ros = ROSConnection.GetOrCreateInstance();
+        if (_ros == null)
+        {
+            Debug.LogWarning("[AutoRecoveryURDF] No se pudo obtener ROSConnection.");
+            return;
+        }
+
+        _ros.Subscribe<EmptyMsg>(TOPIC_RESET, _ => ResetRobot(true));
+        _ros.Subscribe<EmptyMsg>(TOPIC_SUCC, _ => { ReportDone("SUCCESS"); ResetRobot(false); });
+        _ros.RegisterPublisher<StringMsg>(TOPIC_DONE);
     }
 
     // --- Gizmos --------------------------------------------------------------
@@ -185,8 +390,30 @@ public class AutoRecoveryURDF : MonoBehaviour
 
         // Raycast de suelo
         Gizmos.color = Color.cyan;
-        Vector3 origin = Application.isPlaying ? transform.position + Vector3.up * 0.2f
-                                               : transform.position + Vector3.up * 0.2f;
+        Transform gizmoPose = Application.isPlaying ? GetPoseTransform() : transform;
+        Vector3 origin = gizmoPose.position + Vector3.up * 0.2f;
         Gizmos.DrawLine(origin, origin + Vector3.down * groundProbeDistance);
+    }
+}
+
+[DisallowMultipleComponent]
+public class AutoRecoveryCollisionRelay : MonoBehaviour
+{
+    public AutoRecoveryURDF owner;
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (owner != null)
+        {
+            owner.HandleCollisionFromChild(collision.collider);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (owner != null)
+        {
+            owner.HandleCollisionFromChild(other);
+        }
     }
 }

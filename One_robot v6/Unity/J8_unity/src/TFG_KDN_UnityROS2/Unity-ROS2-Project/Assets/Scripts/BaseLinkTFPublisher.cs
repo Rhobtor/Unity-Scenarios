@@ -12,9 +12,27 @@ public class BaseLinkTFPublisher : MonoBehaviour
     public string parentFrame = "odom";
     public string childFrame  = "base_link";
     public float publishRate  = 30f; // Hz
+    public Transform poseSource;
 
     ROSConnection ros;
     float tAccum;
+
+    void Awake()
+    {
+        if (poseSource == null)
+        {
+            var recovery = GetComponent<AutoRecoveryURDF>();
+            if (recovery != null)
+            {
+                poseSource = recovery.GetPoseTransform();
+            }
+        }
+
+        if (poseSource == null)
+        {
+            poseSource = transform;
+        }
+    }
 
     void Start()
     {
@@ -34,12 +52,14 @@ public class BaseLinkTFPublisher : MonoBehaviour
 
     void PublishTF()
     {
+        Transform source = poseSource != null ? poseSource : transform;
+
         // --- POSICIÓN: Unity -> ROS base (x=z_u, y=-x_u, z=y_u) ---
-        Vector3 pU = transform.position;
+        Vector3 pU = source.position;
         var translation = new Vector3Msg(pU.z, -pU.x, pU.y);
 
         // --- ORIENTACIÓN: yaw plano (ROS yaw = - Unity yaw) ---
-        float yawUnity = Mathf.Atan2(transform.forward.x, transform.forward.z);
+        float yawUnity = Mathf.Atan2(source.forward.x, source.forward.z);
         float yawRos   = -yawUnity;
         float half     = 0.5f * yawRos;
         var rotation   = new QuaternionMsg(0f, 0f, Mathf.Sin(half), Mathf.Cos(half));

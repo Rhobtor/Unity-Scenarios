@@ -4479,9 +4479,9 @@ GameObject:
   - component: {fileID: 221976657}
   - component: {fileID: 221976656}
   - component: {fileID: 221976655}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (6)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4786,9 +4786,9 @@ GameObject:
   - component: {fileID: 234693558}
   - component: {fileID: 234693557}
   - component: {fileID: 234693556}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5663,7 +5663,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f8f38dc30f7dd50ac88d00e781f8109a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5731,9 +5731,9 @@ GameObject:
   - component: {fileID: 284993053}
   - component: {fileID: 284993052}
   - component: {fileID: 284993051}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7242,9 +7242,9 @@ GameObject:
   - component: {fileID: 344081344}
   - component: {fileID: 344081343}
   - component: {fileID: 344081342}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10299,7 +10299,6 @@ GameObject:
   - component: {fileID: 442961828}
   - component: {fileID: 442961829}
   - component: {fileID: 442961830}
-  - component: {fileID: 442961831}
   m_Layer: 0
   m_Name: j8
   m_TagString: robot
@@ -10487,39 +10486,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.900873, y: 1.5950918, z: 3.7171373}
   m_Center: {x: 0.027167678, y: 0.2975459, z: -0.046681643}
---- !u!114 &442961831
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442961823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84ba49f9555ae2b391449af221662ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AutoRecoveryURDF
-  rootAb: {fileID: 1721332841}
-  spawnPoint: {fileID: 1377237149}
-  cooldownAfterReset: 1
-  maxTiltDeg: 75
-  minUpY: 0.15
-  stuckSpeed: 0.05
-  stuckSeconds: 40000
-  minY: -5
-  minBounds: {x: -Infinity, y: -Infinity, z: -Infinity}
-  maxBounds: {x: Infinity, y: Infinity, z: Infinity}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  groundProbeDistance: 100
-  cliffDropThreshold: 1
-  resetOnCollision: 1
-  resetCollisionLayers:
-    serializedVersion: 2
-    m_Bits: 1024
-  resetCollisionTag: ResetObstacle
-  drawDebug: 1
 --- !u!1 &443891031
 GameObject:
   m_ObjectHideFlags: 0
@@ -19425,9 +19391,9 @@ GameObject:
   - component: {fileID: 804668809}
   - component: {fileID: 804668808}
   - component: {fileID: 804668807}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder (3)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21290,11 +21256,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   groundProbeDistance: 100
   cliffDropThreshold: 1
-  resetOnCollision: 1
-  resetCollisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  resetCollisionTag: ResetObstacle
   drawDebug: 0
 --- !u!114 &892385532
 MonoBehaviour:
@@ -21311,7 +21272,6 @@ MonoBehaviour:
   parentFrame: odom
   childFrame: base_link
   publishRate: 30
-  poseSource: {fileID: 0}
 --- !u!1 &892472328
 GameObject:
   m_ObjectHideFlags: 8
@@ -23028,9 +22988,9 @@ GameObject:
   - component: {fileID: 989448648}
   - component: {fileID: 989448647}
   - component: {fileID: 989448646}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28285,11 +28245,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   groundProbeDistance: 100
   cliffDropThreshold: 1
-  resetOnCollision: 1
-  resetCollisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  resetCollisionTag: ResetObstacle
   drawDebug: 0
 --- !u!1 &1228440390
 GameObject:
@@ -29594,9 +29549,9 @@ GameObject:
   - component: {fileID: 1310594468}
   - component: {fileID: 1310594467}
   - component: {fileID: 1310594466}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30469,7 +30424,6 @@ MonoBehaviour:
   parentFrame: odom
   childFrame: base_link
   publishRate: 30
-  poseSource: {fileID: 0}
 --- !u!1 &1334911657
 GameObject:
   m_ObjectHideFlags: 0
@@ -30591,9 +30545,9 @@ GameObject:
   - component: {fileID: 1343346108}
   - component: {fileID: 1343346107}
   - component: {fileID: 1343346106}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder (2)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31499,9 +31453,9 @@ GameObject:
   - component: {fileID: 1390250752}
   - component: {fileID: 1390250751}
   - component: {fileID: 1390250750}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder (1)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35961,9 +35915,9 @@ GameObject:
   - component: {fileID: 1618475484}
   - component: {fileID: 1618475483}
   - component: {fileID: 1618475482}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cylinder (4)
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36218,7 +36172,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ce8e5364726e6884db26486f57912f2a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ce8e5364726e6884db26486f57912f2a,
         type: 3}
@@ -37332,9 +37286,9 @@ GameObject:
   - component: {fileID: 1704420279}
   - component: {fileID: 1704420278}
   - component: {fileID: 1704420277}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube
-  m_TagString: ResetObstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40924,11 +40878,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   groundProbeDistance: 100
   cliffDropThreshold: 1
-  resetOnCollision: 1
-  resetCollisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  resetCollisionTag: ResetObstacle
   drawDebug: 0
 --- !u!114 &1889890776
 MonoBehaviour:
@@ -40945,7 +40894,6 @@ MonoBehaviour:
   parentFrame: odom
   childFrame: base_link
   publishRate: 30
-  poseSource: {fileID: 0}
 --- !u!1 &1893698683
 GameObject:
   m_ObjectHideFlags: 0
