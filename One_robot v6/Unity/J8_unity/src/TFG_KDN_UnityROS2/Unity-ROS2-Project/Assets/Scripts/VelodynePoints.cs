@@ -15,6 +15,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     public enum VerticalAnglesMode
     {
         VLP16Preset,
+        HDL32EPreset,
         Custom
     }
 
@@ -46,6 +47,19 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
          -3f, 13f,  -1f, 15f
     };
 
+    // HDL-32E: 32 haces, FoV vertical aprox. de -30.67 a +10.67 grados.
+    static readonly float[] kHdl32eAnglesDeg =
+    {
+        -30.67f, -29.33f, -28.00f, -26.67f,
+        -25.33f, -24.00f, -22.67f, -21.33f,
+        -20.00f, -18.67f, -17.33f, -16.00f,
+        -14.67f, -13.33f, -12.00f, -10.67f,
+         -9.33f,  -8.00f,  -6.67f,  -5.33f,
+         -4.00f,  -2.67f,  -1.33f,   0.00f,
+          1.33f,   2.67f,   4.00f,   5.33f,
+          6.67f,   8.00f,   9.33f,  10.67f
+    };
+
     const float FIRING_SEQUENCE_SEC = 55.296e-6f;
     const float LASER_FIRE_SEC      =  2.304e-6f;
 
@@ -58,7 +72,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     public string frameId = "velodyne";
     public bool publishInRosFrame = true; // x forward, y left, z up
 
-    [Header("Modelo VLP-16")]
+    [Header("Modelo Velodyne")]
     [Range(300f, 1200f)] public float rpm = 600f;
     public VerticalAnglesMode verticalAnglesMode = VerticalAnglesMode.VLP16Preset;
     public float[] customVerticalAnglesDeg = new float[16];
@@ -195,7 +209,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     {
         lidarOrigin = transform;
         motionSource = GetComponentInParent<Rigidbody>();
-        LoadVLP16PresetIntoCustom();
+        LoadSelectedPresetIntoCustom();
         InitPerRingArrays();
     }
 
@@ -243,10 +257,34 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         Array.Copy(kVlp16AnglesDeg, customVerticalAnglesDeg, kVlp16AnglesDeg.Length);
     }
 
+    [ContextMenu("Cargar preset HDL-32E en Custom")]
+    public void LoadHDL32EPresetIntoCustom()
+    {
+        customVerticalAnglesDeg = new float[kHdl32eAnglesDeg.Length];
+        Array.Copy(kHdl32eAnglesDeg, customVerticalAnglesDeg, kHdl32eAnglesDeg.Length);
+    }
+
+    public void LoadSelectedPresetIntoCustom()
+    {
+        switch (verticalAnglesMode)
+        {
+            case VerticalAnglesMode.HDL32EPreset:
+                LoadHDL32EPresetIntoCustom();
+                break;
+            case VerticalAnglesMode.Custom:
+                if (customVerticalAnglesDeg == null || customVerticalAnglesDeg.Length == 0)
+                    LoadVLP16PresetIntoCustom();
+                break;
+            default:
+                LoadVLP16PresetIntoCustom();
+                break;
+        }
+    }
+
     void LoadArraysIfNeeded()
     {
         if (customVerticalAnglesDeg == null || customVerticalAnglesDeg.Length == 0)
-            LoadVLP16PresetIntoCustom();
+            LoadSelectedPresetIntoCustom();
 
         InitPerRingArrays();
     }
@@ -278,9 +316,15 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
 
     float[] GetVerticalAngleArray()
     {
-        return verticalAnglesMode == VerticalAnglesMode.VLP16Preset
-            ? kVlp16AnglesDeg
-            : customVerticalAnglesDeg;
+        switch (verticalAnglesMode)
+        {
+            case VerticalAnglesMode.HDL32EPreset:
+                return kHdl32eAnglesDeg;
+            case VerticalAnglesMode.Custom:
+                return customVerticalAnglesDeg;
+            default:
+                return kVlp16AnglesDeg;
+        }
     }
 
     void ClampParams()
