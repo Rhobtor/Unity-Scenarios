@@ -46,6 +46,7 @@ public class AutoRecoveryURDF : MonoBehaviour
     float _stuckTimer, _cooldownUntil;
 
     ROSConnection _ros;
+    bool _rosInitialized;
 
     void Awake()
     {
@@ -59,18 +60,36 @@ public class AutoRecoveryURDF : MonoBehaviour
             foreach (var ab in _allAbs) if (ab.isRoot) { rootAb = ab; break; }
             if (rootAb == null) rootAb = GetComponent<ArticulationBody>();
         }
+    }
+
+    void OnEnable()
+    {
+        InitializeRos();
+    }
+
+    void Start()
+    {
+        InitializeRos();
+    }
+
+    void InitializeRos()
+    {
+        if (_rosInitialized || !isActiveAndEnabled)
+        {
+            return;
+        }
 
         _ros = ROSConnection.instance;
-        if (_ros != null)
-        {
-            _ros.Subscribe<EmptyMsg>(TOPIC_RESET, _ => ResetRobot(true));
-            _ros.Subscribe<EmptyMsg>(TOPIC_SUCC,  _ => { ReportDone("SUCCESS"); ResetRobot(false); });
-            _ros.RegisterPublisher<StringMsg>(TOPIC_DONE);
-        }
-        else
+        if (_ros == null)
         {
             Debug.LogWarning("[AutoRecoveryURDF] No hay ROSConnection.instance en la escena.");
+            return;
         }
+
+        _ros.Subscribe<EmptyMsg>(TOPIC_RESET, _ => ResetRobot(true));
+        _ros.Subscribe<EmptyMsg>(TOPIC_SUCC,  _ => { ReportDone("SUCCESS"); ResetRobot(false); });
+        _ros.RegisterPublisher<StringMsg>(TOPIC_DONE);
+        _rosInitialized = true;
     }
 
     void Update()

@@ -7289,33 +7289,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -7337,33 +7337,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -8346,33 +8346,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -8394,33 +8394,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -10665,7 +10665,7 @@ MonoBehaviour:
   wheelA4: {fileID: 375705894}
   wheelB1: {fileID: 341935150}
   wheelB2: {fileID: 1128268488}
-  wheelB3: {fileID: 1128268488}
+  wheelB3: {fileID: 629741022}
   wheelB4: {fileID: 593319080}
   maxMotorTorque: 3500
   brakeTorque: 7000
@@ -10683,7 +10683,6 @@ MonoBehaviour:
   stopYawRateThreshold: 0.08
   hardStopAtIdle: 1
   idleLinearDamping: 6
-  lateralDamping: 12
   idleAngularDamping: 10
   invertLeftSide: 0
   invertRightSide: 0
@@ -10833,7 +10832,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 442961823}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f84ba49f9555ae2b391449af221662ad, type: 3}
   m_Name: 
@@ -14572,33 +14571,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -14620,33 +14619,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -15470,33 +15469,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -15518,33 +15517,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -21122,33 +21121,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -21170,33 +21169,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -21751,7 +21750,6 @@ MonoBehaviour:
   stopYawRateThreshold: 0.08
   hardStopAtIdle: 1
   idleLinearDamping: 6
-  lateralDamping: 12
   idleAngularDamping: 10
   invertLeftSide: 0
   invertRightSide: 1
@@ -27197,33 +27195,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -27245,33 +27243,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -28042,7 +28040,6 @@ MonoBehaviour:
   stopYawRateThreshold: 0.08
   hardStopAtIdle: 1
   idleLinearDamping: 6
-  lateralDamping: 12
   idleAngularDamping: 10
   invertLeftSide: 0
   invertRightSide: 1
@@ -28553,33 +28550,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -28601,33 +28598,33 @@ MonoBehaviour:
     radius: 0.35
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 5
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
@@ -29169,33 +29166,33 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     length: 0
-    maxForce: 8829.001
-    maxLength: 0.2
+    maxForce: 6000
+    maxLength: 0
     prevLength: 0
     compressionVelocity: 0
   damper:
-    bumpRate: 220.72502
-    reboundRate: 220.72502
+    bumpRate: 1200
+    reboundRate: 1600
     slowBump: 1.4
     fastBump: 0.6
     bumpDivisionVelocity: 0.06
@@ -29214,42 +29211,42 @@ MonoBehaviour:
     inertia: 0
     invInertia: 0
     mass: 30
-    radius: 0.35
+    radius: 0.3
     invRadius: 3
     width: 0.25
-    rimOffset: 0.1
+    rimOffset: 0
   sideFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 0.5
     speed: 0
     loadFactor: 1.5
   forwardFriction:
     force: 0
     slip: 0
     grip: 1
-    stiffness: 1
+    stiffness: 2
     speed: 0
     loadFactor: 1.5
-  activeFrictionPreset: {fileID: 11400000, guid: 633292cc3c8d1e34fa8da881bfb3d0bd,
+  activeFrictionPreset: {fileID: 11400000, guid: 8fa8a2c6069c00541aa092e84e007c73,
     type: 2}
   camber: 0
-  loadRating: 2943.0002
-  chassisTorqueCoefficient: 1
-  rollingResistanceTorque: 30
+  loadRating: 3500
+  chassisTorqueCoefficient: 0.2
+  rollingResistanceTorque: 9
   frictionCircleStrength: 1
   frictionCirclePower: 3
   targetRigidbody: {fileID: 442961825}
-  forceApplicationPointDistance: 0.8
+  forceApplicationPointDistance: 0.15
   disableMotionVectors: 1
-  suspensionExtensionSpeedCoeff: 6
+  suspensionExtensionSpeedCoeff: 2
   damageMaxWobbleAngle: 30
   otherBodyForceScale: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 1
-  meshColliderLayer: 2
+  meshColliderLayer: 0
   useContactModification: 1
   frictionSubsteps: 20
 --- !u!1 &1224940001

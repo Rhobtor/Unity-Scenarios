@@ -57,6 +57,7 @@ public class AutoRecoveryURDF : MonoBehaviour
     float _stuckTimer, _cooldownUntil;
 
     ROSConnection _ros;
+    bool _rosInitialized;
 
     void Awake()
     {
@@ -80,6 +81,15 @@ public class AutoRecoveryURDF : MonoBehaviour
         _startPos = _poseTransform.position;
         _startRot = _poseTransform.rotation;
 
+    }
+
+    void OnEnable()
+    {
+        EnsureRosConnection();
+    }
+
+    void Start()
+    {
         EnsureRosConnection();
     }
 
@@ -357,7 +367,7 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     void EnsureRosConnection()
     {
-        if (_ros != null) return;
+        if (_rosInitialized || !isActiveAndEnabled) return;
 
         _ros = ROSConnection.GetOrCreateInstance();
         if (_ros == null)
@@ -369,6 +379,7 @@ public class AutoRecoveryURDF : MonoBehaviour
         _ros.Subscribe<EmptyMsg>(TOPIC_RESET, _ => ResetRobot(true));
         _ros.Subscribe<EmptyMsg>(TOPIC_SUCC, _ => { ReportDone("SUCCESS"); ResetRobot(false); });
         _ros.RegisterPublisher<StringMsg>(TOPIC_DONE);
+        _rosInitialized = true;
     }
 
     // --- Gizmos --------------------------------------------------------------

@@ -291,9 +291,6 @@ namespace NWH.WheelController3D
         private int _targetRigidbodyId;
         private bool _wakeOneFrame;
 
-        private const float FrictionSpeedDeadzone = 0.05f;
-        private const float FrictionSlipDeadzone = 0.02f;
-
 
         private void Awake()
         {
@@ -475,16 +472,6 @@ namespace NWH.WheelController3D
                 // Get forward and side friction speed components
                 forwardFriction.speed = Vector3.Dot(_hitContactVelocity, _wheelForward);
                 sideFriction.speed = Vector3.Dot(_hitContactVelocity, _wheelRight);
-
-                if (Mathf.Abs(forwardFriction.speed) < FrictionSpeedDeadzone)
-                {
-                    forwardFriction.speed = 0f;
-                }
-
-                if (Mathf.Abs(sideFriction.speed) < FrictionSpeedDeadzone)
-                {
-                    sideFriction.speed = 0f;
-                }
             }
 
             // --------------------------- SUSPENSION ---------------------------
@@ -554,14 +541,10 @@ namespace NWH.WheelController3D
             // --------------------------- APPLY FORCES ---------------------------
             // Update axle torque
             // Calculate axle torque
-            if (_isGrounded && Mathf.Abs(chassisTorqueCoefficient) > Vehicle.SMALL_NUMBER
-                && Mathf.Abs(forwardFriction.force) > Vehicle.SMALL_NUMBER)
-            {
-                Vector3 torque = Vector3.Cross(wheelHit.point - targetRigidbody.worldCenterOfMass,
-                                               forwardFriction.force * _wheelRight) * chassisTorqueCoefficient;
-                Vector3 axleTorque = Vector3.Project(torque, _wheelRight);
-                targetRigidbody.AddTorque(axleTorque);
-            }
+            Vector3 torque = Vector3.Cross(wheelHit.point - targetRigidbody.worldCenterOfMass,
+                                           forwardFriction.force * _wheelRight) * chassisTorqueCoefficient;
+            Vector3 axleTorque = Vector3.Project(torque, _wheelRight);
+            targetRigidbody.AddTorque(axleTorque);
 
 
             if (_isGrounded)
@@ -871,41 +854,16 @@ namespace NWH.WheelController3D
             forwardFriction.slip = _isGrounded ?
                 -(wheel.angularVelocity * wheel.radius - forwardFriction.speed) * invClampedAbsForwardSpeed * forwardFriction.stiffness : 0.0f;
             forwardFriction.slip = Mathf.Clamp(forwardFriction.slip, -1.0f, 1.0f);
-
-            if (Mathf.Abs(forwardFriction.slip) < FrictionSlipDeadzone)
-            {
-                forwardFriction.slip = 0f;
-            }
-
             counterTorque = -totalWheelTorque;
 
             // *******************************
             // ********** LATERAL ************ 
             // *******************************
             sideFriction.slip = (Mathf.Atan2(sideFriction.speed, clampedAbsForwardSpeed) * Mathf.Rad2Deg) * 0.01111f * sideFriction.stiffness;
-
-            if (Mathf.Abs(sideFriction.slip) < FrictionSlipDeadzone)
-            {
-                sideFriction.slip = 0f;
-            }
-
             float sideSlipSign = sideFriction.slip < 0 ? -1f : 1f;
             float absSideSlip = sideFriction.slip < 0 ? -sideFriction.slip : sideFriction.slip;
             float peakSideFrictionForce = activeFrictionPreset.BCDE.z * latLoadClamped;
             sideFriction.force = -sideSlipSign * activeFrictionPreset.Curve.Evaluate(absSideSlip) * latLoadClamped * camberFrictionCoeff;
-
-            if (_isGrounded && motorTorque == 0f && brakeTorque > 0f
-                && Mathf.Abs(forwardFriction.speed) < FrictionSpeedDeadzone
-                && Mathf.Abs(sideFriction.speed) < FrictionSpeedDeadzone
-                && Mathf.Abs(wheel.angularVelocity) < 0.1f)
-            {
-                forwardFriction.force = 0f;
-                sideFriction.force = 0f;
-                forwardFriction.slip = 0f;
-                sideFriction.slip = 0f;
-                wheel.angularVelocity = 0f;
-                _lowSpeedReferenceIsSet = false;
-            }
 
             // *******************************
             // ******* ANTI - CREEP **********
@@ -924,14 +882,8 @@ namespace NWH.WheelController3D
                 }
                 else
                 {
-                    Vector3 referenceError = Vector3.ProjectOnPlane(_lowSpeedReferencePosition - currentPosition, _suspensionUp);
-                    if (referenceError.sqrMagnitude < 0.000025f)
-                    {
-                        referenceError = _zeroVector;
-                        _lowSpeedReferencePosition = currentPosition;
-                    }
-
-                    Vector3 correctiveForce = Vector3.ClampMagnitude(_invDt * load * referenceError, load * 0.5f);
+                    Vector3 referenceError = _lowSpeedReferencePosition - currentPosition;
+                    Vector3 correctiveForce = _invDt * load * referenceError;
 
                     if (Mathf.Abs(wheel.angularVelocity) < 0.5f)
                     {

@@ -79,6 +79,9 @@ namespace RosSharp.Control
         [Tooltip("Linear deceleration applied directly to the Rigidbody when there is no command.")]
         public float idleLinearDamping = 6f;
 
+        [Tooltip("Sideways damping applied in local X to suppress lateral drift from wheel slip.")]
+        public float lateralDamping = 12f;
+
         [Tooltip("Yaw damping applied directly to the Rigidbody when there is no command.")]
         public float idleAngularDamping = 10f;
 
@@ -219,33 +222,7 @@ namespace RosSharp.Control
             SetWheelTorque(wheelB3, appliedRightTorque, rightBrake);
             SetWheelTorque(wheelB4, appliedRightTorque, rightBrake);
 
-            if (hasNoLinearCommand || hasNoAngularCommand)
-            {
-                Vector3 dampedLocalLinearVelocity = transform.InverseTransformDirection(targetRigidbody.linearVelocity);
-                if (hasNoLinearCommand)
-                {
-                    dampedLocalLinearVelocity.x = 0f;
-                    dampedLocalLinearVelocity.z = 0f;
-                }
-                else
-                {
-                    dampedLocalLinearVelocity.x = Mathf.MoveTowards(dampedLocalLinearVelocity.x, 0f, idleLinearDamping * Time.fixedDeltaTime);
-                }
-
-                targetRigidbody.linearVelocity = transform.TransformDirection(dampedLocalLinearVelocity);
-
-                Vector3 dampedAngularVelocity = targetRigidbody.angularVelocity;
-                if (hasNoAngularCommand)
-                {
-                    dampedAngularVelocity.y = 0f;
-                }
-                else
-                {
-                    dampedAngularVelocity.y = Mathf.MoveTowards(dampedAngularVelocity.y, 0f, idleAngularDamping * Time.fixedDeltaTime);
-                }
-
-                targetRigidbody.angularVelocity = dampedAngularVelocity;
-            }
+            ApplyCommandAxisConstraints(hasNoLinearCommand, hasNoAngularCommand);
 
             if (hardStopAtIdle && isStopCommand && isNearlyStopped)
             {
@@ -270,6 +247,40 @@ namespace RosSharp.Control
             if (wc == null) return;
             wc.MotorTorque = motorTorque;
             wc.BrakeTorque = brake;
+        }
+
+        private void ApplyCommandAxisConstraints(bool hasNoLinearCommand, bool hasNoAngularCommand)
+        {
+            Vector3 constrainedLocalVelocity = transform.InverseTransformDirection(targetRigidbody.linearVelocity);
+            constrainedLocalVelocity.x = Mathf.MoveTowards(constrainedLocalVelocity.x, 0f, lateralDamping * Time.fixedDeltaTime);
+
+            if (hasNoLinearCommand)
+            {
+                constrainedLocalVelocity.z = Mathf.MoveTowards(constrainedLocalVelocity.z, 0f, idleLinearDamping * Time.fixedDeltaTime);
+                if (Mathf.Abs(constrainedLocalVelocity.z) < stopSpeedThreshold)
+                {
+                    constrainedLocalVelocity.z = 0f;
+                }
+            }
+
+            if (Mathf.Abs(constrainedLocalVelocity.x) < speedErrorDeadzone)
+            {
+                constrainedLocalVelocity.x = 0f;
+            }
+
+            targetRigidbody.linearVelocity = transform.TransformDirection(constrainedLocalVelocity);
+
+            Vector3 constrainedLocalAngularVelocity = transform.InverseTransformDirection(targetRigidbody.angularVelocity);
+            if (hasNoAngularCommand)
+            {
+                constrainedLocalAngularVelocity.y = Mathf.MoveTowards(constrainedLocalAngularVelocity.y, 0f, idleAngularDamping * Time.fixedDeltaTime);
+                if (Mathf.Abs(constrainedLocalAngularVelocity.y) < stopYawRateThreshold)
+                {
+                    constrainedLocalAngularVelocity.y = 0f;
+                }
+            }
+
+            targetRigidbody.angularVelocity = transform.TransformDirection(constrainedLocalAngularVelocity);
         }
 
         private float CalculateBrakeTorque(float targetSideSpeed, float currentSideSpeed, float normalizedInput)
