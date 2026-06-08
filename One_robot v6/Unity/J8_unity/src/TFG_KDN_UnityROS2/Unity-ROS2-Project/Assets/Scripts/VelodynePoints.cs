@@ -77,6 +77,12 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     public VerticalAnglesMode verticalAnglesMode = VerticalAnglesMode.VLP16Preset;
     public float[] customVerticalAnglesDeg = new float[16];
 
+    [Header("Montaje")]
+    [Tooltip("Offset vertical aplicado a todos los haces. Negativo mira mas hacia el suelo.")]
+    [Range(-45f, 45f)] public float elevationOffsetDeg = 0f;
+    [Tooltip("Rotacion local virtual del sensor en grados XYZ. Permite replicar el montaje real sin rotar el GameObject.")]
+    public Vector3 mountEulerDeg = Vector3.zero;
+
     [Header("Recorte horizontal")]
     public bool limitAzimuth = false;
     [Tooltip("0=delante, 90=izquierda, 180=detrás, 270=derecha")]
@@ -150,12 +156,20 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     [Header("Rendimiento")]
     public int batchSize = 512;
     public bool autoRebuildInPlayMode = true;
+    [Tooltip("Limita cuantas revoluciones completas puede simular en un mismo frame para evitar bloqueos si el sensor va atrasado.")]
+    [Range(1, 4)] public int maxScansPerFrame = 1;
+    [Tooltip("Si se acumulan scans pendientes, descarta los antiguos y reengancha el simulador al tiempo actual.")]
+    public bool dropLateScans = true;
 
     [Header("Debug")]
     public bool drawRays = false;
     public float debugRayDuration = 0.02f;
     public Color hitColor = Color.green;
     public Color missColor = Color.red;
+    public bool drawFrameDebug = true;
+    public bool drawSampleRaysInEditor = true;
+    [Range(0.1f, 5f)] public float debugAxisLength = 0.75f;
+    [Range(0.5f, 50f)] public float debugSampleRayLength = 8f;
 
     [Header("Semilla")]
     public int randomSeed = 12345;
@@ -204,6 +218,10 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     bool cachedAddTime;
     bool cachedAddReturnType;
     int cachedMaxHitsPerRay;
+    float cachedElevationOffsetDeg;
+    Vector3 cachedMountEulerDeg;
+    int cachedMaxScansPerFrame;
+    bool cachedDropLateScans;
 
     void Reset()
     {
@@ -238,6 +256,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
 
     void OnValidate()
     {
+        SyncPresetArrays();
         LoadArraysIfNeeded();
         ClampParams();
 
@@ -248,6 +267,32 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
     void OnDestroy()
     {
         DisposeNative();
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!drawFrameDebug)
+            return;
+
+        Transform frameT = lidarOrigin != null ? lidarOrigin : transform;
+        Quaternion baseRotation = frameT.rotation;
+        Quaternion mountedRotation = baseRotation * GetMountRotation();
+        Vector3 origin = frameT.position;
+
+        DrawFrameAxes(origin, baseRotation, debugAxisLength, 0.75f);
+        DrawFrameAxes(origin, mountedRotation, debugAxisLength, 1f);
+
+        if (!drawSampleRaysInEditor)
+            return;
+
+        float[] angles = GetVerticalAngleArray();
+        if (angles == null || angles.Length == 0)
+            return;
+
+        DrawSampleRay(origin, mountedRotation, 0f, angles[0] + elevationOffsetDeg, debugSampleRayLength, Color.yellow);
+        DrawSampleRay(origin, mountedRotation, 0f, angles[angles.Length / 2] + elevationOffsetDeg, debugSampleRayLength, new Color(1f, 0.5f, 0f));
+        DrawSampleRay(origin, mountedRotation, 0f, angles[angles.Length - 1] + elevationOffsetDeg, debugSampleRayLength, Color.cyan);
+        DrawSampleRay(origin, mountedRotation, 90f, angles[0] + elevationOffsetDeg, debugSampleRayLength, new Color(1f, 1f, 0.4f));
     }
 
     [ContextMenu("Cargar preset VLP-16 en Custom")]
@@ -279,6 +324,42 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
                 LoadVLP16PresetIntoCustom();
                 break;
         }
+    }
+
+    void SyncPresetArrays()
+    {
+        float[] preset = null;
+
+        switch (verticalAnglesMode)
+        {
+            case VerticalAnglesMode.HDL32EPreset:
+                preset = kHdl32eAnglesDeg;
+                break;
+            case VerticalAnglesMode.VLP16Preset:
+                preset = kVlp16AnglesDeg;
+                break;
+        }
+
+        if (preset == null)
+            return;
+
+        if (customVerticalAnglesDeg != null && customVerticalAnglesDeg.Length == preset.Length)
+        {
+            bool alreadySynced = true;
+            for (int i = 0; i < preset.Length; i++)
+            {
+                if (!Mathf.Approximately(customVerticalAnglesDeg[i], preset[i]))
+                {
+                    alreadySynced = false;
+                    break;
+                }
+            }
+
+            if (alreadySynced)
+                return;
+        }
+
+        customVerticalAnglesDeg = (float[])preset.Clone();
     }
 
     void LoadArraysIfNeeded()
@@ -333,6 +414,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         minRange = Mathf.Max(0.01f, minRange);
         maxRange = Mathf.Max(minRange + 0.01f, maxRange);
         batchSize = Mathf.Max(1, batchSize);
+        maxScansPerFrame = Mathf.Clamp(maxScansPerFrame, 1, 4);
         maxHitsPerRay = Mathf.Clamp(maxHitsPerRay, 2, 16);
         dualMinSeparationMeters = Mathf.Max(0.01f, dualMinSeparationMeters);
         falseReturnMinRange = Mathf.Max(minRange, falseReturnMinRange);
@@ -381,12 +463,17 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
 
         double now = Time.realtimeSinceStartupAsDouble;
         double scanPeriod = 60.0 / rpm;
+        int scansThisFrame = 0;
 
-        while (now >= nextScanTime)
+        while (now >= nextScanTime && scansThisFrame < maxScansPerFrame)
         {
             SimulateAndPublishOneRevolution();
             nextScanTime += scanPeriod;
+            scansThisFrame++;
         }
+
+        if (dropLateScans && now >= nextScanTime)
+            nextScanTime = now + scanPeriod;
     }
 
     void EnsurePublisherRegistered()
@@ -420,6 +507,10 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
             cachedAddTime != addTimeField ||
             cachedAddReturnType != addReturnTypeField ||
             cachedMaxHitsPerRay != maxHitsPerRay ||
+            !Mathf.Approximately(cachedElevationOffsetDeg, elevationOffsetDeg) ||
+            (cachedMountEulerDeg - mountEulerDeg).sqrMagnitude > 1e-6f ||
+            cachedMaxScansPerFrame != maxScansPerFrame ||
+            cachedDropLateScans != dropLateScans ||
             commands.Length == 0 ||
             scratchBuffer == null;
     }
@@ -451,6 +542,10 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         cachedAddTime = addTimeField;
         cachedAddReturnType = addReturnTypeField;
         cachedMaxHitsPerRay = maxHitsPerRay;
+        cachedElevationOffsetDeg = elevationOffsetDeg;
+        cachedMountEulerDeg = mountEulerDeg;
+        cachedMaxScansPerFrame = maxScansPerFrame;
+        cachedDropLateScans = dropLateScans;
     }
 
     void BuildFieldsLayout()
@@ -803,6 +898,36 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         return bestIdx;
     }
 
+    Quaternion GetMountRotation()
+    {
+        return Quaternion.Euler(mountEulerDeg);
+    }
+
+    void DrawFrameAxes(Vector3 origin, Quaternion rotation, float axisLength, float alpha)
+    {
+        Color old = Gizmos.color;
+
+        Gizmos.color = new Color(1f, 0f, 0f, alpha);
+        Gizmos.DrawLine(origin, origin + rotation * Vector3.right * axisLength);
+
+        Gizmos.color = new Color(0f, 1f, 0f, alpha);
+        Gizmos.DrawLine(origin, origin + rotation * Vector3.up * axisLength);
+
+        Gizmos.color = new Color(0f, 0.6f, 1f, alpha);
+        Gizmos.DrawLine(origin, origin + rotation * Vector3.forward * axisLength);
+
+        Gizmos.color = old;
+    }
+
+    void DrawSampleRay(Vector3 origin, Quaternion rotation, float azDeg, float elDeg, float length, Color color)
+    {
+        Vector3 dir = rotation * BuildLocalDirection(azDeg, elDeg);
+        Color old = Gizmos.color;
+        Gizmos.color = color;
+        Gizmos.DrawLine(origin, origin + dir.normalized * length);
+        Gizmos.color = old;
+    }
+
     void BuildRay(
         Vector3 origin0, Quaternion rot0,
         Vector3 linearVel, Vector3 angularVelWorld,
@@ -810,7 +935,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         out Vector3 origin, out Vector3 dirWorld)
     {
         origin = origin0;
-        Quaternion rot = rot0;
+        Quaternion rot = rot0 * GetMountRotation();
 
         if (enableMotionDistortion && motionSource != null)
         {
@@ -820,7 +945,7 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
             {
                 float angleDeg = angularVelWorld.magnitude * Mathf.Rad2Deg * tRel;
                 Quaternion delta = Quaternion.AngleAxis(angleDeg, angularVelWorld.normalized);
-                rot = delta * rot0;
+                rot = delta * rot;
             }
         }
 
@@ -832,6 +957,8 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
             az += NextGaussian(0f, azimuthJitterStdDeg);
             el += NextGaussian(0f, elevationJitterStdDeg);
         }
+
+        el += elevationOffsetDeg;
 
         Vector3 localDir = BuildLocalDirection(az, el);
         dirWorld = rot * localDir;
@@ -954,9 +1081,10 @@ public class VelodyneVLP16RealisticPublisher : MonoBehaviour
         byte returnType)
     {
         Transform frameT = lidarOrigin != null ? lidarOrigin : transform;
+        Quaternion frameRotation = frameT.rotation * GetMountRotation();
 
         Vector3 pWorld = originWorld + dirWorld.normalized * range;
-        Vector3 pLocal = frameT.InverseTransformPoint(pWorld);
+        Vector3 pLocal = Quaternion.Inverse(frameRotation) * (pWorld - frameT.position);
 
         float x, y, z;
         if (publishInRosFrame)

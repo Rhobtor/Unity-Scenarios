@@ -28,6 +28,7 @@ public class AutoRecoveryURDF : MonoBehaviour
     [Header("Detección de suelo / barrancos")]
     public LayerMask groundLayers = ~0;     // capas del terreno
     public float groundProbeDistance = 100f;
+    public float groundProbeStartOffset = 0.05f;
     [Tooltip("Si el suelo detectado está más lejos que esto => barranco")]
     public float cliffDropThreshold = 1.0f;
 
@@ -206,11 +207,12 @@ public class AutoRecoveryURDF : MonoBehaviour
 
     bool IsVoidOrCliffBelow()
     {
-        Vector3 origin = _poseTransform.position + Vector3.up * 0.2f; // un pelín arriba
+        float probeLift = Mathf.Max(groundProbeStartOffset, 0.01f);
+        Vector3 origin = GetGroundProbeBasePoint() + Vector3.up * probeLift;
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, groundProbeDistance, groundLayers, QueryTriggerInteraction.Ignore))
         {
             if (drawDebug) Debug.DrawLine(origin, hit.point, Color.cyan, 0.1f);
-            return hit.distance > cliffDropThreshold; // suelo demasiado lejos => “barranco”
+            return Mathf.Max(0f, hit.distance - probeLift) > cliffDropThreshold; // suelo demasiado lejos => “barranco”
         }
         if (drawDebug) Debug.DrawLine(origin, origin + Vector3.down * groundProbeDistance, Color.red, 0.1f);
         return true; // ningún impacto => vacío/fin de mapa
@@ -352,6 +354,39 @@ public class AutoRecoveryURDF : MonoBehaviour
         return transform;
     }
 
+    Vector3 GetGroundProbeBasePoint()
+    {
+        if (_robotColliders != null)
+        {
+            bool hasCollider = false;
+            float lowestY = float.PositiveInfinity;
+            Vector3 probePoint = _poseTransform != null ? _poseTransform.position : transform.position;
+
+            foreach (var robotCollider in _robotColliders)
+            {
+                if (robotCollider == null || !robotCollider.enabled || !robotCollider.gameObject.activeInHierarchy) continue;
+
+                Bounds bounds = robotCollider.bounds;
+                if (bounds.size == Vector3.zero) continue;
+
+                if (!hasCollider || bounds.min.y < lowestY)
+                {
+                    lowestY = bounds.min.y;
+                    probePoint = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+                    hasCollider = true;
+                }
+            }
+
+            if (hasCollider)
+            {
+                return probePoint;
+            }
+        }
+
+        Transform pose = _poseTransform != null ? _poseTransform : transform;
+        return pose.position;
+    }
+
     void ReportDone(string reason)
     {
         EnsureRosConnection();
@@ -401,8 +436,9 @@ public class AutoRecoveryURDF : MonoBehaviour
 
         // Raycast de suelo
         Gizmos.color = Color.cyan;
-        Transform gizmoPose = Application.isPlaying ? GetPoseTransform() : transform;
-        Vector3 origin = gizmoPose.position + Vector3.up * 0.2f;
+        Vector3 origin = Application.isPlaying
+            ? GetGroundProbeBasePoint() + Vector3.up * Mathf.Max(groundProbeStartOffset, 0.01f)
+            : transform.position + Vector3.up * Mathf.Max(groundProbeStartOffset, 0.01f);
         Gizmos.DrawLine(origin, origin + Vector3.down * groundProbeDistance);
     }
 }
